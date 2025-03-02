@@ -87,7 +87,7 @@ const TextBubble = ({ elementID, index }: Props) => {
         <HoverCardTrigger>
           {/* <Input draggable onDrag={onDragStart} onBlur={() => setActiveElement(null)} onFocus={() => setActiveElement(elementID)} value={element?.text} onChange={onChangeText} /> */}
           <div onClick={() => setActiveElement(elementID)} className={cn("w-full  border p-1 px-2 rounded-md")}>
-            {element?.text}
+            <MessageComponent template={element?.text || ""} />
           </div>
         </HoverCardTrigger>
         <HoverCardContent side="right" sideOffset={28} className="border border-blue-300 rounded-xl w-[25rem]">
@@ -130,6 +130,11 @@ const TextInput = ({ elementID, index }: Props) => {
     updateNodeData(nodeID, { ...nodeData, group: updatedGroup });
   };
 
+  const onUpdateVariable = (e: FocusEvent<HTMLInputElement, Element>) => {
+    const updatedGroup = nodeData.group.map((item) => (item.id === elementID ? { ...item, variable: e.target.value } : item));
+    updateNodeData(nodeID, { ...nodeData, group: updatedGroup });
+  };
+
   return (
     <Fragment>
       {dragGroupElement ? <div id={elementID + "before"} className="bg-gray-100 h-2 w-full rounded-md"></div> : null}
@@ -152,11 +157,33 @@ const TextInput = ({ elementID, index }: Props) => {
             <Input defaultValue={element?.placeholder} onBlur={onUpdatePlaceholder} />
             <Label className="mt-3 text-sm">Send button label</Label>
             <Input defaultValue={element?.buttonLabel} onBlur={onUpdateSendLabel} />
+            <Label className="mt-3 text-sm">Save in variable</Label>
+            <Input defaultValue={element?.variable} onBlur={onUpdateVariable} />
           </div>
         </HoverCardContent>
       </HoverCard>
       {index === nodeData.group.length - 1 && dragGroupElement ? <div id={elementID + "after"} className="bg-gray-100 h-2 w-full rounded-md"></div> : null}
     </Fragment>
+  );
+};
+
+const MessageComponent = ({ template }: { template: string }) => {
+  const regex = /\{\{(.*?)\}\}/g; // Matches {{key}}
+
+  const parts = template.split(regex); // Splits the string at placeholders
+
+  return (
+    <p>
+      {parts.map((part, index) =>
+        template.includes(`{{${part}}}`) ? (
+          <span key={index} className="bg-blue-500 text-white w-56 px-2 rounded-md pb-px ">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </p>
   );
 };
 

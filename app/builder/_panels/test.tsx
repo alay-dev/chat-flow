@@ -43,7 +43,7 @@ const Test = () => {
 
   const scrollToBottom = () => {
     if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+      chatRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -75,11 +75,12 @@ const Test = () => {
 
     // Continue bot messages
 
-    const inputID = messages[currentMessageIndex].id;
+    const currentInput = messages[currentMessageIndex];
 
     setInputs((prev) => {
       const newMap = new Map(prev);
-      newMap.set(inputID, input);
+      newMap.set(currentInput.id, input);
+      if (currentInput.variable) newMap.set(currentInput.variable, input);
       return newMap;
     });
 
@@ -99,7 +100,7 @@ const Test = () => {
           Restart
         </Button>
       </div>
-      <ScrollArea ref={chatRef} className="bg-gray-100 h-[82vh] mt-5 rounded-md">
+      <ScrollArea className="bg-gray-200 h-[82vh] mt-5 rounded-md">
         <div className="flex flex-col px-3 py-4 ">
           {messages.map((msg, i) => {
             const isBotAvatar = (i === 0 && msg.type === "bubble") || (i !== 0 && msg.type === "bubble" && messages[i - 1].type === "input");
@@ -122,6 +123,7 @@ const Test = () => {
                 );
             }
           })}
+          <div ref={chatRef} />
         </div>
       </ScrollArea>
     </div>
@@ -134,14 +136,14 @@ const BubbleElement = (element: GroupElement) => {
   switch (element.nodeType) {
     case "TEXT":
       return (
-        <div className="p-3 rounded-lg bg-white w-3/5 border">
+        <div className="p-3 rounded-xl bg-white w-4/5 border">
           <p className="leading-tight text-sm">{element.text}</p>
         </div>
       );
     case "IMAGE":
       return (
-        <div className="w-3/5 rounded-lg overflow-hidden">
-          <img src={element.image} alt="" className="max-h-64 w-full object-cover" />
+        <div className="w-4/5 rounded-xl overflow-hidden p-3 bg-white">
+          <img src={element.image} alt="" className="max-h-64 w-full object-cover rounded-lg" />
         </div>
       );
   }
@@ -152,10 +154,13 @@ const InputElement = ({ element, handleSendMessage, isAnswered }: { element: Gro
 
   switch (element.nodeType) {
     case "TEXT":
+      if (isAnswered) {
+        return <div className="bg-blue-600 text-white rounded-xl p-3">{input}</div>;
+      }
       return (
         <div className="flex gap-2">
           <Input placeholder={element.placeholder} value={input} onChange={(e) => setInput(e.target.value)} className="bg-white" />
-          {!isAnswered ? <Button onClick={() => handleSendMessage(input)}>{element.buttonLabel}</Button> : null}
+          {<Button onClick={() => handleSendMessage(input)}>{element.buttonLabel}</Button>}
         </div>
       );
   }

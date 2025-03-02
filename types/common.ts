@@ -11,6 +11,7 @@ export type GroupElement = {
   type: "input" | "bubble";
   placeholder?: string;
   buttonLabel?: string;
+  variable?: string;
 };
 
 export type Group = Node<{ group: GroupElement[]; name: string }>;

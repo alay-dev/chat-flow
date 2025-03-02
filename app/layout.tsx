@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Wix_Madefor_Display } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 
-const madefor = Wix_Madefor_Display({
-  variable: "--font-madefor",
+const nunito = Nunito_Sans({
+  variable: "--font-nunito",
   subsets: ["latin"],
 });
 
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning className={`${madefor.className} antialiased`}>
+      <body suppressHydrationWarning className={`${nunito.className} antialiased`}>
         {children}
       </body>
     </html>
