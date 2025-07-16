@@ -29,6 +29,7 @@ const Canvas = () => {
       onReconnect={onReconnect}
       onReconnectStart={onReconnectStart}
       onReconnectEnd={onReconnectEnd}
+      //@ts-expect-error nodeTypes type mismatch with ReactFlow expected type
       nodeTypes={nodeTypes}
       defaultViewport={defaultViewport}
       panOnDrag={!isPanDisabled}

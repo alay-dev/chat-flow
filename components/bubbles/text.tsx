@@ -1,5 +1,5 @@
 // import { Input } from "../ui/input";
-import { ChangeEvent, DragEvent, FocusEvent, Fragment } from "react";
+import { FocusEvent, Fragment } from "react";
 import { Edge, useNodeId, useNodesData, useReactFlow } from "@xyflow/react";
 import { Entity, Group } from "@/types/common";
 import { useAppStore } from "@/store/main";
@@ -34,9 +34,9 @@ const TextBubble = ({ elementID, index }: Props) => {
   const nodeID = useNodeId()!;
   const nodeData = useNodesData<Group>([nodeID])[0].data;
   const element = nodeData.group?.find((item) => item.id === elementID);
-  const { updateNodeData, updateNode } = useReactFlow<Group, Edge>();
-  const { activeElement, setDisablePan, setActiveElement } = useAppStore((state) => state);
-  const { dragGroupElement, setDragGroupElement, setDraggedOverGroup } = useGroupStore((state) => state);
+  const { updateNodeData } = useReactFlow<Group, Edge>();
+  const { activeElement, setActiveElement } = useAppStore((state) => state);
+  const { dragGroupElement } = useGroupStore((state) => state);
 
   // const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
   //   if (!element) return;

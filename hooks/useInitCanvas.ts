@@ -52,7 +52,7 @@ const useInitCanvas = ({ setNodes, setEdges }: Props) => {
   );
 
   const onReconnectEnd = useCallback(
-    (_, edge: Edge) => {
+    (event: unknown, edge: Edge) => {
       if (!edgeReconnectSuccessful.current) {
         setEdges((eds) => eds.filter((e) => e.id !== edge.id));
       }
